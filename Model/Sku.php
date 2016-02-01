@@ -78,6 +78,10 @@ class Sku extends \Magento\Framework\Model\AbstractModel
     {
         $isLimitExceeded = false;
 
+        if (!$this->_helper->isEnabled() || !$this->_helper->isAdminAffected()) {
+            return $isLimitExceeded;
+        }
+
         $productSize = $isNew
             ? $this->_getProductsSize() + 1
             : $this->_getProductsSize();

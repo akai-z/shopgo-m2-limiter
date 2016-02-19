@@ -46,14 +46,25 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Get admin users on which limiter rules apply on
+     * Get admin users which limiter rules apply on
      *
      * @return array
      */
-    protected function _getAdminUsers()
+    public function getAdminUsers()
     {
         $users = $this->_config->getConfigData(self::XML_PATH_GENERAL_ADMIN_USERS);
         return array_map('trim', explode(',', $users));
+    }
+
+    /**
+     * Set admin users which limiter rules will apply on
+     *
+     * @param string $adminUsers
+     * @return bool
+     */
+    public function setAdminUsers($adminUsers)
+    {
+        return $this->_config->setConfigData(self::XML_PATH_GENERAL_ADMIN_USERS, $adminUsers);
     }
 
     /**
@@ -74,7 +85,7 @@ class Data extends AbstractHelper
     public function isAdminAffected()
     {
         $admin  = $this->_authSession->getUser()->getUsername();
-        $admins = array_flip($this->_getAdminUsers());
+        $admins = array_flip($this->getAdminUsers());
 
         return isset($admins[$admin]);
     }

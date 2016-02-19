@@ -58,7 +58,7 @@ class SetSkuLimit extends Command
             )
         ];
 
-        $this->setName('limiter:sku-limit')
+        $this->setName('limiter:set-sku-limit')
             ->setDescription('Set SKU limit')
             ->setDefinition($options);
 

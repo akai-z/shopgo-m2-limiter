@@ -60,7 +60,7 @@ class SetAdminUsers extends Command
             )
         ];
 
-        $this->setName('limiter:admin-users')
+        $this->setName('limiter:set-admin-users')
             ->setDescription('Add admin users')
             ->setDefinition($options);
 

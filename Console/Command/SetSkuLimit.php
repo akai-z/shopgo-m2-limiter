@@ -10,7 +10,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use ShopGo\Limiter\Model\Config;
+use Magento\Framework\App\State;
+use ShopGo\Limiter\Model\SkuFactory as SkuLimiterFactory;
 
 /**
  * Set SKU limit
@@ -23,17 +24,24 @@ class SetSkuLimit extends Command
     const LIMIT_ARGUMENT = 'limit';
 
     /**
-     * @var Config
+     * @var State
      */
-    private $_config;
+    private $_state;
 
     /**
-     * @param Config $config
+     * @var SkuLimiterFactory
+     */
+    private $_skuLimiterFactory;
+
+    /**
+     * @param State $state
      * @param SkuLimiter $skuLimiter
      */
-    public function __construct(Config $config) {
+    public function __construct(State $state, SkuLimiterFactory $skuLimiterFactory)
+    {
         parent::__construct();
-        $this->_config = $config;
+        $this->_state = $state;
+        $this->_skuLimiterFactory = $skuLimiterFactory;
     }
 
     /**
@@ -58,50 +66,6 @@ class SetSkuLimit extends Command
     }
 
     /**
-     * Set SKU limit
-     *
-     * @param string $content
-     * @return string
-     */
-    protected function _setLimit($content)
-    {
-        $result = false;
-
-        try {
-            $group = [
-                'sku' => [
-                    'fields' => [
-                        'limit' => [
-                            'value' => $content
-                        ]
-                    ]
-                ]
-            ];
-
-            $configData = [
-                'section' => 'limiter',
-                'website' => null,
-                'store'   => null,
-                'groups'  => $group
-            ];
-
-            $result = $this->_config->setConfigData($configData);
-
-            $result = true;
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $messages = explode("\n", $e->getMessage());
-
-            foreach ($messages as $message) {
-                $result .= "\n" . $message;
-            }
-        } catch (\Exception $e) {
-            $result .= "\n" . $e->getMessage();
-        }
-
-        return $result;
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -110,9 +74,9 @@ class SetSkuLimit extends Command
         $skuLimit = $input->getArgument(self::LIMIT_ARGUMENT);
 
         if (!is_null($skuLimit)) {
-            $this->_config->setAreaCode('adminhtml');
+            $this->_state->setAreaCode('adminhtml');
 
-            $result = $this->_setLimit($skuLimit);
+            $result = $this->_skuLimiterFactory->create()->setLimit($skuLimit);
 
             $result = $result
                 ? 'SKU limit has been set!'

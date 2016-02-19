@@ -20,22 +20,12 @@ class BeforeCatalogProductSave implements ObserverInterface
     protected $_skuLimiter;
 
     /**
-     * App state
-     *
-     * @var \Magento\Framework\App\State
-     */
-    protected $_appState;
-
-    /**
      * @param \ShopGo\Limiter\Model\Sku $skuLimiter
-     * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
-        \ShopGo\Limiter\Model\Sku $skuLimiter,
-        \Magento\Framework\App\State $appState
+        \ShopGo\Limiter\Model\Sku $skuLimiter
     ) {
         $this->_skuLimiter = $skuLimiter;
-        $this->_appState = $appState;
     }
 
     /**

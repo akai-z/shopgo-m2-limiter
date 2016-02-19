@@ -17,22 +17,12 @@ class Config extends \Magento\Framework\Model\AbstractModel
     protected $_configFactory;
 
     /**
-     * App state
-     *
-     * @var \Magento\Framework\App\State
-     */
-    protected $_appState;
-
-    /**
      * @param \Magento\Config\Model\Config\Factory $configFactory
-     * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
-        \Magento\Config\Model\Config\Factory $configFactory,
-        \Magento\Framework\App\State $appState
+        \Magento\Config\Model\Config\Factory $configFactory
     ) {
         $this->_configFactory = $configFactory;
-        $this->_appState = $appState;
     }
 
     /**
@@ -98,15 +88,5 @@ class Config extends \Magento\Framework\Model\AbstractModel
         } catch (\Exception $e) {}
 
         return $result;
-    }
-
-    /**
-     * Set area code
-     *
-     * @param string $code
-     */
-    public function setAreaCode($code)
-    {
-        $this->_appState->setAreaCode($code);
     }
 }

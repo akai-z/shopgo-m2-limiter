@@ -49,16 +49,6 @@ class Sku extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Get SKU limit
-     *
-     * @return int
-     */
-    protected function _getLimit()
-    {
-        return $this->_config->getConfigData(self::XML_PATH_SKU_LIMIT);
-    }
-
-    /**
      * Get products size
      *
      * @return int
@@ -66,6 +56,27 @@ class Sku extends \Magento\Framework\Model\AbstractModel
     protected function _getProductsSize()
     {
         return $this->_product->getCollection()->getSize();
+    }
+
+    /**
+     * Get SKU limit
+     *
+     * @return int
+     */
+    public function getLimit()
+    {
+        return $this->_config->getConfigData(self::XML_PATH_SKU_LIMIT);
+    }
+
+    /**
+     * Set SKU limit
+     *
+     * @param int $limit
+     * @return bool
+     */
+    public function setLimit($limit)
+    {
+        return $this->_config->setConfigData(self::XML_PATH_SKU_LIMIT, $limit);
     }
 
     /**
@@ -86,7 +97,7 @@ class Sku extends \Magento\Framework\Model\AbstractModel
             ? $this->_getProductsSize() + 1
             : $this->_getProductsSize();
 
-        if ($productSize > $this->_getLimit()) {
+        if ($productSize > $this->getLimit()) {
             $isLimitExceeded = true;
         }
 

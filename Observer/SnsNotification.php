@@ -15,7 +15,7 @@ class SnsNotification implements ObserverInterface
     /**
      * Limiter code
      */
-    const CODE = 'limiter';
+    const CODE = 'ShopGo_Limiter';
 
     /**
      * Set SKU limit action

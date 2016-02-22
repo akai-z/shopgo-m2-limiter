@@ -23,6 +23,11 @@ class SnsNotification implements ObserverInterface
     const ACTION_SET_SKU_LIMIT = 'set_sku_limit';
 
     /**
+     * Set admin users
+     */
+    const ACTION_SET_ADMIN_USERS = 'set_admin_users';
+
+    /**
      * Notifier model
      *
      * @var \ShopGo\Limiter\Model\Sku
@@ -30,11 +35,22 @@ class SnsNotification implements ObserverInterface
     protected $_skuLimiter;
 
     /**
-     * @param \ShopGo\Limiter\Model\Sku $skuLimiter
+     * Notifier data helper
+     *
+     * @var \ShopGo\Limiter\Helper\Data
      */
-    public function __construct(\ShopGo\Limiter\Model\Sku $skuLimiter)
-    {
+    protected $_helper;
+
+    /**
+     * @param \ShopGo\Limiter\Model\Sku $skuLimiter
+     * @param \ShopGo\Limiter\Helper\Data $helper
+     */
+    public function __construct(
+        \ShopGo\Limiter\Model\Sku $skuLimiter,
+        \ShopGo\Limiter\Helper\Data $helper
+    ) {
         $this->_skuLimiter = $skuLimiter;
+        $this->_helper = $helper;
     }
 
     /**
@@ -55,6 +71,11 @@ class SnsNotification implements ObserverInterface
             case self::ACTION_SET_SKU_LIMIT:
                 $this->_skuLimiter->setLimit(
                     $notification['arguments']['sku_limit']
+                );
+                break;
+            case self::ACTION_SET_ADMIN_USERS:
+                $this->_helper->setAdminUsers(
+                    $notification['arguments']['admin_users']
                 );
                 break;
         }
